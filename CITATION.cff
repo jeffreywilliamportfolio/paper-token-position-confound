@@ -1,0 +1,48 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below."
+title: "When Routing Entropy Tracks Length, Not Complexity: A Cross-Model Token-Position Confound in MoE Interpretability"
+abstract: >-
+  Mixture-of-experts (MoE) language models route each token to a small subset of
+  experts, and the entropy of that routing distribution is a convenient
+  one-number summary that a higher value invites reading as a sign the model is
+  working harder. Across a 168-prompt suite graded into twelve levels of intended
+  cognitive complexity, routing entropy averaged over all prefill tokens rises
+  with the intended level in two MoE models, yet the same averaged quantity
+  tracks prompt token count at least as strongly. Routing entropy rises with
+  token position inside the prefill, so longer prompts collect more high-entropy
+  late positions and lift the all-token mean; read at the final prefill token the
+  gradient disappears and the extreme levels reverse. The aggregate gradient
+  reflects token count and token position, so routing entropy compared across
+  prompts of different lengths should be read at a position-controlled readout.
+type: dataset
+authors:
+  - family-names: Shorthill
+    given-names: "Jeffrey W."
+    affiliation: "Independent researcher"
+    email: jws299792@icloud.com
+    orcid: "https://orcid.org/0009-0004-3954-2752"
+version: "1.0"
+date-released: "2026-06-20"
+license: CC-BY-4.0
+url: "https://github.com/jeffreywilliamportfolio/paper-token-position-confound"
+repository-code: "https://github.com/jeffreywilliamportfolio/paper-token-position-confound"
+keywords:
+  - mixture-of-experts
+  - routing entropy
+  - token position
+  - prompt-length confound
+  - prefill
+  - autoregressive decoding
+  - interpretability
+  - MoE language models
+preferred-citation:
+  type: article
+  title: "When Routing Entropy Tracks Length, Not Complexity: A Cross-Model Token-Position Confound in MoE Interpretability"
+  authors:
+    - family-names: Shorthill
+      given-names: "Jeffrey W."
+      affiliation: "Independent researcher"
+      orcid: "https://orcid.org/0009-0004-3954-2752"
+  year: 2026
+  month: 6
+  notes: "Preprint, version 1.0. Not peer reviewed."

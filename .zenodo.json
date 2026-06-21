@@ -1,0 +1,28 @@
+{
+  "upload_type": "publication",
+  "publication_type": "preprint",
+  "title": "When Routing Entropy Tracks Length, Not Complexity: A Cross-Model Token-Position Confound in MoE Interpretability",
+  "version": "1.0",
+  "language": "eng",
+  "license": "cc-by-4.0",
+  "access_right": "open",
+  "creators": [
+    {
+      "name": "Shorthill, Jeffrey W.",
+      "affiliation": "Independent researcher",
+      "orcid": "0009-0004-3954-2752"
+    }
+  ],
+  "keywords": [
+    "mixture-of-experts",
+    "routing entropy",
+    "token position",
+    "prompt-length confound",
+    "prefill",
+    "autoregressive decoding",
+    "interpretability",
+    "MoE language models"
+  ],
+  "description": "<p>Mixture-of-experts (MoE) language models route each token to a small subset of experts, and the entropy of that routing distribution is a convenient one-number summary that a higher value invites reading as a sign the model is working harder. Across a 168-prompt suite graded into twelve levels of intended cognitive complexity, routing entropy averaged over all prefill tokens rises with the intended level in two MoE models (DeepSeek V3.1, Spearman &rho;&nbsp;=&nbsp;+0.80; Qwen3.5-397B, &rho;&nbsp;=&nbsp;+0.62). The same averaged quantity tracks prompt token count more strongly (&rho;&nbsp;=&nbsp;+0.88 and +0.78).</p><p>Routing entropy rises with token position inside the prefill, so longer prompts collect more high-entropy late positions and lift the all-token mean. Reading routing entropy at the final prefill token, whose receptive field already spans the whole prompt, removes the gradient: the correlation with level falls to &rho;&nbsp;=&nbsp;+0.02 for DeepSeek V3.1 and &rho;&nbsp;=&nbsp;&minus;0.06 for Qwen, and a level-1 versus level-12 comparison reverses sign. The all-token pattern repeats in a DeepSeek R1 run on the same suite. In this setup the aggregate gradient reflects token count and token position; routing entropy compared across prompts of different lengths should be reported at a position-controlled readout, or with position and length modeled directly, before a between-prompt difference is read as a difference in what the prompts demand.</p>",
+  "notes": "Preprint, version 1.0; not peer reviewed. The three figures and reported correlations are recomputed by make_figures.py from a preserved capture archive and re-run no model; a claim-by-claim source index is given in SOURCES.md. Written with the intentional, disclosed use of large language models for drafting, organization, and bibliography formatting; the human author verified every value and reference and takes full responsibility for the text."
+}
