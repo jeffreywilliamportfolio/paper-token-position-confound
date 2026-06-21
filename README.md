@@ -2,8 +2,11 @@
 
 A Cross-Model Token-Position Confound in MoE Interpretability — paper source, figures, and reproducibility materials.
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20779602.svg)](https://doi.org/10.5281/zenodo.20779602)
+
 **Author:** Jeffrey W. Shorthill (independent researcher) · `jws299792@icloud.com`
 **Version:** 1.0 (June 2026) · preprint, not peer reviewed
+**DOI:** [10.5281/zenodo.20779602](https://doi.org/10.5281/zenodo.20779602) (concept DOI — resolves to the latest version)
 **License:** [CC BY 4.0](LICENSE)
 
 ## What this is
