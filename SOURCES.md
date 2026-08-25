@@ -3,7 +3,7 @@
 All paths are relative to:
 `/Volumes/ExternalSSD/moe-routing-organized/legacy-learning-runs/`
 
-Archive root used: `token-confound-archive/` (created 2026-03-19).
+Archive root used: `token-confound-archive/` (created 2026-03-19). Paper v1.1 (2026-08-18) adds the quantitative reading of row #15; no other value changed.
 
 | # | Claim in paper | Value | Source file | Status |
 |---|----------------|-------|-------------|--------|
@@ -21,7 +21,7 @@ Archive root used: `token-confound-archive/` (created 2026-03-19).
 | 12 | DeepSeek V3.1 per-level mean prompt token counts | L1≈31.7 … L8≈152.6 … L12≈136.9 | computed from `token-confound-archive/data/ds31-168q-1_prefill.json` (`per_prompt[].n_tokens`) | verified (recomputed) |
 | 13 | DeepSeek R1 replication, all-token RE vs level / vs tokens | ρ=+0.84 / ρ=+0.86 | `token-confound-archive/NARRATIVE.md` §3; per-prompt recompute from `raw/168q-r1-deepseek-r1/results_168_r1_prefill.json` gives ρ(RE,tokens)=0.859 | verified (recomputed) |
 | 14 | 98-prompt generation baseline: RE vs gen-length vs level | ρ=+0.51 (p≈5e-7) / ρ=+0.20 (p=0.05) | `token-confound-archive/NARRATIVE.md` §1 | verified |
-| 15 | Per-token routing entropy rises with prefill position | qualitative (diagnostic) | `token-confound-archive/data/diagnostic_results.json`; `position-diagnostic/` (run + figures) | verified (qualitative) |
+| 15 | Per-token routing entropy rises with prefill position (Qwen 397B, 5 prompts, 60 MoE layers): OLS slope positive in each prompt, p≤0.012 (2.6e-3/token at 24 tokens … 1.1e-4 at 180); Spearman(position, RE) +0.22…+0.56 (all p<0.02); first-5 mean 0.833 in every prompt, last-5 mean 0.867–0.879 | quantitative (v1.1) | `token-confound-archive/data/diagnostic_results.json` (fields `slope`, `p_value`, `position_entropy`); recomputed by `make_figures.py:fig3` | verified (recomputed 2026-08-18) |
 | 16 | v2.2 partial recovery: all-token RE vs tokens / vs level on 17/32 prompts, L1–L3 | ρ=−0.66 / ρ=−0.58 | `token-confound-archive/PARTIAL-RESULTS.md`; `supplemental/recovery/` | preliminary (subset only) |
 | 17 | 30-turn generation "spike" set aside as length-confounded | TC peak on longest turn | `journals/JOURNAL-ARCHIVE.md` "Feb 27–Mar 1: 30-Turn TC Spike" | audit context (interpretive/superseded) |
 | 18 | Data-integrity event (fabricated per-prompt tables, corrected) | provenance | `journals/JOURNAL-ARCHIVE.md` "Data Integrity Event" | audit context |
@@ -33,7 +33,7 @@ Archive root used: `token-confound-archive/` (created 2026-03-19).
 |--------|--------------|---------------|
 | Fig 1 (per-level RE means, both models) | `make_figures.py:fig1` | rows #11 (per-level tables) |
 | Fig 2 (DeepSeek V3.1 RE vs token count) | `make_figures.py:fig2` | rows #11, #12; annotation #3 |
-| Fig 3 (Spearman ρ bars) | `make_figures.py:fig3` | rows #1–#8 |
+| Fig 3 (v1.1: per-token RE vs position, Qwen 397B) | `make_figures.py:fig3` | row #15 (v1.0 Fig 3 Spearman bars, rows #1–#8, now carried by Table 1 only) |
 
 Drive figures `token-confound-archive/figures/01–04_cross_model_*.png` cover the
 same four comparisons and were inspected. The paper regenerates its own figures

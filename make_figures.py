@@ -13,6 +13,10 @@ Per-level mean prompt-token counts for DeepSeek V3.1 are computed from
 data/ds31-168q-1_prefill.json.
 
 Summary Spearman correlations are transcribed from CROSS_MODEL_POSITION_CONFOUND.md.
+
+Figure 3 (v1.1) plots the per-token position diagnostic (data/diagnostic_results.json,
+Qwen 397B, five prompts) in place of the v1.0 Spearman bar chart, whose values
+are carried by Table 1 of the paper.
 """
 import json
 import os
@@ -124,40 +128,46 @@ def fig2():
 
 
 # ---------------------------------------------------------------------------
-# Figure 3: Spearman rho comparison, both models, four readouts
+# Figure 3: per-token routing entropy vs prefill position (Qwen 397B diagnostic)
+# Source: token-confound-archive/data/diagnostic_results.json (5 prompts,
+# 60 MoE layers => Qwen3.5-397B). Raw per-position values plus the OLS fit
+# stored in the archive record (slope/intercept). No model is run.
 # ---------------------------------------------------------------------------
 def fig3():
-    labels = ["all-token\nvs level", "all-token\nvs token count",
-              "final-token\nvs level", "final-token\nvs token count"]
-    keys = ["all_level", "all_tokens", "last_level", "last_tokens"]
-    ds = [RHO["DeepSeek V3.1"][k] for k in keys]
-    qw = [RHO["Qwen 397B"][k] for k in keys]
-    x = range(len(labels))
-    w = 0.38
-    fig, ax = plt.subplots(figsize=(6.6, 3.7))
-    ax.bar([i - w / 2 for i in x], ds, w, color=C_ALL, label="DeepSeek V3.1")
-    ax.bar([i + w / 2 for i in x], qw, w, color=C_LAST, label="Qwen 397B")
-    ax.axhline(0, color="k", lw=0.8)
-    ax.set_xticks(list(x))
-    ax.set_xticklabels(labels, fontsize=8.5)
-    ax.set_ylabel(r"Spearman $\rho$")
-    ax.set_title("Spearman correlation of routing entropy with level and token count")
-    ax.set_ylim(-0.35, 1.0)
-    ax.legend(fontsize=8.5, loc="upper right")
-    for i, v in enumerate(ds):
-        ax.annotate("%.2f" % v, (i - w / 2, v),
-                    textcoords="offset points",
-                    xytext=(0, 3 if v >= 0 else -10),
-                    ha="center", fontsize=7.5)
-    for i, v in enumerate(qw):
-        ax.annotate("%.2f" % v, (i + w / 2, v),
-                    textcoords="offset points",
-                    xytext=(0, 3 if v >= 0 else -10),
-                    ha="center", fontsize=7.5)
+    d = json.load(open(os.path.join(ARCHIVE, "data/diagnostic_results.json")))
+    order = sorted(d.keys(), key=lambda k: d[k]["n_tokens"])
+    cmap = plt.get_cmap("viridis")
+    fig, ax = plt.subplots(figsize=(4.6, 3.5))
+    for i, k in enumerate(order):
+        v = d[k]
+        y = v["position_entropy"]
+        x = list(range(len(y)))
+        c = cmap(0.1 + 0.8 * i / max(1, len(order) - 1))
+        ax.plot(x, y, color=c, lw=0.6, alpha=0.4)
+        fit = [v["intercept"] + v["slope"] * t for t in x]
+        ax.plot(x, fit, color=c, lw=2.2, ls="--",
+                label="%s, %d tok, slope %.1e" % (v["level"], v["n_tokens"], v["slope"]))
+        ax.plot(x[-1], y[-1], "o", color=c, ms=6, mec="k", mew=0.5, zorder=4)
+    ax.set_xlabel("prefill token position")
+    ax.set_ylabel("routing entropy (normalized)")
+    ax.set_title("Qwen 397B: routing entropy vs. position", fontsize=10)
+    ax.set_ylim(0.745, 0.93)
+    ax.legend(fontsize=7.5, loc="lower right", framealpha=0.92, title="prompt (level, length, fit slope/token)", title_fontsize=7.5)
     fig.tight_layout()
-    fig.savefig(os.path.join(OUT, "fig3_spearman.pdf"))
-    fig.savefig(os.path.join(OUT, "fig3_spearman.png"))
+    fig.savefig(os.path.join(OUT, "fig3_position_curves.pdf"))
+    fig.savefig(os.path.join(OUT, "fig3_position_curves.png"))
     plt.close(fig)
+    # print the per-prompt Spearman(position, entropy) for the text
+    try:
+        from scipy.stats import spearmanr
+        for k in order:
+            v = d[k]
+            r, pv = spearmanr(range(v["n_tokens"]), v["position_entropy"])
+            print("fig3 %s L=%s n=%d spearman(pos,RE)=%+.2f p=%.2g slope=%.2e p=%.2g first5=%.3f last5=%.3f"
+                  % (k, v["level"], v["n_tokens"], r, pv, v["slope"], v["p_value"],
+                     sum(v["position_entropy"][:5]) / 5, sum(v["position_entropy"][-5:]) / 5))
+    except ImportError:
+        pass
 
 
 if __name__ == "__main__":
